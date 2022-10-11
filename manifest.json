@@ -1,0 +1,14 @@
+{
+  "manifest_version": 3,
+  "name": "Block Site Extension",
+  "description": "BBlock site and support learn languages",
+  "version": "1.0.0",
+  "options_page": "dist/spa/index.html",
+  "permissions": [
+    "storage",
+    "tabs"
+  ],
+  "background": {
+    "service_worker": "background.js"
+  }
+}
