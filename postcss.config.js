@@ -17,8 +17,7 @@ module.exports = {
       ],
     }),
 
-    // require('tailwindcss'),
-    // require('autoprefixer'),
+    require('tailwindcss'),
 
     // https://github.com/elchininet/postcss-rtlcss
     // If you want to support RTL css, then
