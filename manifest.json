@@ -3,7 +3,7 @@
   "name": "Block Site Extension",
   "description": "BBlock site and support learn languages",
   "version": "1.0.0",
-  "options_page": "dist/spa/index.html",
+  "options_page": "index.html",
   "permissions": [
     "storage",
     "tabs"

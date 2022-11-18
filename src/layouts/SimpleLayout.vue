@@ -1,5 +1,5 @@
 <template>
-  <q-layout view="hHh lpR lFf">
+  <q-layout>
     <q-header bordered class="headerStyle flex items-center bg-gray-50">
       <q-toolbar>
         <q-btn
@@ -100,7 +100,7 @@ import { useRoute } from 'vue-router';
 
 export default defineComponent({
   setup() {
-    const leftDrawerOpen = ref(true);
+    const leftDrawerOpen = ref(false);
     const route = useRoute();
 
     return {
