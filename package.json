@@ -2,7 +2,7 @@
   "name": "quasar-block-site",
   "version": "0.0.1",
   "description": "A Quasar Project",
-  "productName": "Quasar App",
+  "productName": "Block & Learn",
   "author": "badung7576 <dung.dang@pirago.work>",
   "private": true,
   "scripts": {
@@ -12,9 +12,15 @@
   },
   "dependencies": {
     "@quasar/extras": "^1.0.0",
+    "@vueuse/rxjs": "^9.4.0",
     "axios": "^0.21.1",
+    "dexie": "^3.2.2",
+    "flowbite": "^1.5.3",
+    "moment": "^2.29.4",
     "pinia": "^2.0.11",
     "quasar": "^2.6.0",
+    "rxjs": "^7.5.7",
+    "uuid": "^9.0.0",
     "vue": "^3.0.0",
     "vue-i18n": "^9.2.2",
     "vue-router": "^4.0.0"
@@ -23,6 +29,7 @@
     "@intlify/vite-plugin-vue-i18n": "^3.3.1",
     "@quasar/app-vite": "^1.0.0",
     "@types/node": "^12.20.21",
+    "@types/uuid": "^9.0.0",
     "@typescript-eslint/eslint-plugin": "^5.10.0",
     "@typescript-eslint/parser": "^5.10.0",
     "autoprefixer": "^10.4.12",

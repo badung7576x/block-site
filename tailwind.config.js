@@ -4,6 +4,11 @@ module.exports = {
   theme: {
     extend: {},
   },
+  variants: {
+    fill: ['hover', 'focus'],
+    visibility: ['group-hover', 'first'],
+    display: ['first'],
+  },
   plugins: [],
   darkMode: 'class',
 };

@@ -1,2 +1,12 @@
 // app global css in SCSS form
+.group:hover .group-hover\:visible {
+  visibility: visible !important;
+}
 
+.first\:block:first-child {
+  display: block !important;
+}
+
+.max-w-none {
+  max-width: none !important;
+}
