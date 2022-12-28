@@ -132,13 +132,15 @@ import FlashCardRow from 'src/components/study_set/FlashCardRow.vue';
 import ConfirmModal from 'src/components/common/ConfirmModal.vue';
 import FlashCardComponent from 'src/components/study_set/FlashCard.vue';
 import { Flashcard } from 'src/types/studyset';
+import { useQuasar } from 'quasar';
 
-const RIGHT_ARROW = 39;
-const LEFT_ARROW = 37;
+// const RIGHT_ARROW = 39;
+// const LEFT_ARROW = 37;
 
 export default defineComponent({
   components: { FlashCardRow, ConfirmModal, FlashCardComponent },
   setup() {
+    const $q = useQuasar();
     const route = useRoute();
     const router = useRouter();
     const studyset = ref<Studyset>();
@@ -148,8 +150,9 @@ export default defineComponent({
     const id = Number.parseInt(route.params.id as string);
 
     onMounted(async () => {
+      $q.loading.show();
       studyset.value = await StudysetService.get(id);
-
+      $q.loading.hide();
       // window.addEventListener('keydown', (e: KeyboardEvent) => {
       //   if (e.keyCode == RIGHT_ARROW) {
       //     selectedFlashcard.value =

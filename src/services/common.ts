@@ -30,7 +30,7 @@ const isValidUrl = (url: string) => {
   if (url === '') return true;
 
   try {
-    const validUrl = new URL(url);
+    new URL(url);
     return true;
   } catch (e) {
     return false;

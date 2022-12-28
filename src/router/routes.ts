@@ -4,7 +4,9 @@ const routes: RouteRecordRaw[] = [
   {
     path: '/options.html',
     redirect: () => {
-      return { path: '/blocksites' };
+      return {
+        path: '/blocksites',
+      };
     },
     component: () => import('layouts/MainLayout.vue'),
     children: [

@@ -1,12 +1,13 @@
 {
   "manifest_version": 3,
   "name": "Block Site Extension",
-  "description": "BBlock site and support learn languages",
+  "description": "Block site and support learn languages",
   "version": "1.0.0",
-  "options_page": "index.html",
+  "options_page": "options.html",
   "permissions": [
     "storage",
-    "tabs"
+    "tabs",
+    "webNavigation"
   ],
   "background": {
     "service_worker": "background.js"

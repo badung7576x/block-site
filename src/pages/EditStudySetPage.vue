@@ -79,10 +79,12 @@ import StudysetService from 'src/services/studyset';
 import CommonService from 'src/services/common';
 import { useRoute, useRouter } from 'vue-router';
 import moment from 'moment';
+import { useQuasar } from 'quasar';
 
 export default defineComponent({
   components: { FlashCardRow, FlashCardInputModal },
   setup() {
+    const $q = useQuasar();
     const route = useRoute();
     const router = useRouter();
     const id = Number.parseInt(route.params.id as string);
@@ -92,10 +94,12 @@ export default defineComponent({
     const flashcards = ref<Flashcard[]>([]);
 
     onMounted(async () => {
+      $q.loading.show();
       studyset.value = await StudysetService.get(id);
       name.value = studyset.value?.name || '';
       description.value = studyset.value?.description || '';
       flashcards.value = studyset.value?.flashcards || [];
+      $q.loading.hide();
     });
 
     return {

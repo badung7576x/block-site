@@ -78,7 +78,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, nextTick, watch } from 'vue';
+import { defineComponent, ref, watch } from 'vue';
 import { v4 as uuidv4 } from 'uuid';
 import FlashCardRow from 'src/components/study_set/FlashCardRow.vue';
 import FlashCardInputModal from 'src/components/study_set/FlashCardInputModal.vue';
@@ -123,28 +123,16 @@ export default defineComponent({
       visibleFlashcardInputModal: ref(false),
       visibleImportMultipleFlashcard,
       addNewTerm: async () => {
-        flashcards.value.push(
-          {
-            id: uuidv4(),
-            order: flashcards.value.length + 1,
-            front_side: '',
-            back_side: '',
-            level: 0,
-            next_learn: moment(),
-            created_at: moment(),
-            updated_at: moment(),
-          },
-          {
-            id: uuidv4(),
-            order: flashcards.value.length + 1,
-            front_side: '',
-            back_side: '',
-            level: 0,
-            next_learn: moment(),
-            created_at: moment(),
-            updated_at: moment(),
-          }
-        );
+        flashcards.value.push({
+          id: uuidv4(),
+          order: flashcards.value.length + 1,
+          front_side: '',
+          back_side: '',
+          level: 0,
+          next_learn: moment(),
+          created_at: moment(),
+          updated_at: moment(),
+        });
       },
       removeFlashcard: (flashcard: Flashcard) => {
         const temp = flashcards.value.filter((item) => item.id != flashcard.id);

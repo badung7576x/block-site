@@ -1,21 +1,6 @@
 'use strict';
 
-chrome.runtime.onInstalled.addListener(function () {});
-
-const __removeProtocol = (url) => url.replace(/^http(s?):\/\//, '');
-const __removeWww = (url) => url.replace(/^www\./, '');
-const __removeTrailingSlash = (url) =>
-  url.endsWith('/') ? url.slice(0, -1) : url;
-
-const normalizeUrl = (url) =>
-  [url].map(__removeProtocol).map(__removeWww).map(__removeTrailingSlash).pop();
-
-chrome.tabs.onUpdated.addListener(function (tabId, changeInfo) {
-  const url = changeInfo.pendingUrl || changeInfo.url;
-  if (!url || !url.startsWith('http')) {
-    return;
-  }
-
+const blocksiteWithUrl = (tabId, url) => {
   const currentDomain = normalizeUrl(url);
 
   let openRequest = indexedDB.open('blocklearn', 10);
@@ -26,6 +11,7 @@ chrome.tabs.onUpdated.addListener(function (tabId, changeInfo) {
     const transaction = db
       .transaction(['blocksites'], 'readonly')
       .objectStore('blocksites');
+
     const request = transaction.getAll();
 
     request.onsuccess = function () {
@@ -67,4 +53,32 @@ chrome.tabs.onUpdated.addListener(function (tabId, changeInfo) {
     console.log('onerror!');
     console.dir(e);
   };
+};
+
+chrome.runtime.onInstalled.addListener(function () {});
+
+const __removeProtocol = (url) => url.replace(/^http(s?):\/\//, '');
+const __removeWww = (url) => url.replace(/^www\./, '');
+const __removeTrailingSlash = (url) =>
+  url.endsWith('/') ? url.slice(0, -1) : url;
+
+const normalizeUrl = (url) =>
+  [url].map(__removeProtocol).map(__removeWww).map(__removeTrailingSlash).pop();
+
+chrome.tabs.onUpdated.addListener(function (tabId, changeInfo) {
+  const url = changeInfo.pendingUrl || changeInfo.url;
+  if (!url || !url.startsWith('http')) {
+    return;
+  }
+
+  blocksiteWithUrl(tabId, url);
+});
+
+chrome.webNavigation.onBeforeNavigate.addListener(function (details) {
+  const url = details.url;
+  if (!url || !url.startsWith('http')) {
+    return;
+  }
+
+  blocksiteWithUrl(details.tabId, url);
 });
