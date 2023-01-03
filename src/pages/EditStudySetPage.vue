@@ -10,14 +10,14 @@
           {{ $t('menu.studysets') }}
         </router-link>
         <span> > </span>
-        {{ $t('edit_study_set.title') }}
+        {{ $t('pEditStudyset.title') }}
       </div>
       <button
         @click="updateStudyset"
         type="button"
-        class="text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-1.5 mr-2 mb-2 focus:outline-none"
+        class="text-gray-500 bg-gray-300 hover:bg-green-700 hover:text-white focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2 focus:outline-none"
       >
-        {{ $t('edit_study_set.update_btn') }}
+        {{ $t('pEditStudyset.btnUpdate') }}
       </button>
     </div>
     <div class="row">
@@ -25,8 +25,7 @@
         v-model="name"
         type="text"
         class="ring-1 ring-slate-200 w-2/3 md:w-1/3 text-sm py-2 pl-4 shadow-sm placeholder-gray-500 rounded-md focus:outline-none focus:ring-2 focus:ring-slate-300"
-        placeholder="Enter course name"
-        required
+        :placeholder="$t('pCreateStudyset.inputNamePlaceholder')"
       />
     </div>
     <div class="row">
@@ -37,12 +36,18 @@
         rows="2"
         type="textarea"
         class="ring-1 ring-slate-200 w-2/3 md:w-1/3 text-sm py-0 pl-4 shadow-sm placeholder-slate-400 rounded-md focus:outline-none focus:ring-2 focus:ring-slate-300 bg-white"
-        placeholder="Enter your description ..."
+        :placeholder="$t('pCreateStudyset.inputDescriptionPlaceholder')"
       ></q-input>
     </div>
-    <div class="row">
+    <div class="flex items-center justify-between">
       <div class="text-xl font-semibold text-gray-500">
-        {{ $t('edit_study_set.terms') }}
+        {{ $t('pCreateStudyset.terms') }}
+      </div>
+      <div
+        @click="visibleImportMultipleFlashcard = true"
+        class="text-lg font-base text-gray-500 mr-2 hover:text-blue-400 hover:underline hover:cursor-pointer"
+      >
+        {{ $t('pCreateStudyset.btnImport') }}
       </div>
     </div>
     <div class="row">
@@ -58,14 +63,19 @@
       <button
         @click="addNewTerm"
         type="button"
-        class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 focus:outline-none"
+        class="text-gray-500 bg-gray-300 hover:bg-green-700 hover:text-white focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2 focus:outline-none"
       >
-        {{ $t('edit_study_set.add_new_term') }}
+        {{ $t('pCreateStudyset.btnAddNewTerm') }}
       </button>
     </div>
     <flash-card-input-modal
       v-model="visibleFlashcardInputModal"
     ></flash-card-input-modal>
+    <import-multiple-flashcard
+      v-model="visibleImportMultipleFlashcard"
+      @import="importFlashcards"
+    />
+    <scroll-to-top />
   </q-page>
 </template>
 
@@ -74,6 +84,8 @@ import { defineComponent, ref, onMounted } from 'vue';
 import { v4 as uuidv4 } from 'uuid';
 import FlashCardRow from 'src/components/study_set/FlashCardRow.vue';
 import FlashCardInputModal from 'src/components/study_set/FlashCardInputModal.vue';
+import ImportMultipleFlashcard from 'src/components/study_set/ImportMultipleFlashcard.vue';
+import ScrollToTop from 'src/components/common/ScrollToTop.vue';
 import { Flashcard, Studyset } from 'src/types/studyset';
 import StudysetService from 'src/services/studyset';
 import CommonService from 'src/services/common';
@@ -82,7 +94,12 @@ import moment from 'moment';
 import { useQuasar } from 'quasar';
 
 export default defineComponent({
-  components: { FlashCardRow, FlashCardInputModal },
+  components: {
+    FlashCardRow,
+    FlashCardInputModal,
+    ImportMultipleFlashcard,
+    ScrollToTop,
+  },
   setup() {
     const $q = useQuasar();
     const route = useRoute();
@@ -92,6 +109,7 @@ export default defineComponent({
     const description = ref<string>('');
     const studyset = ref<Studyset>();
     const flashcards = ref<Flashcard[]>([]);
+    const visibleImportMultipleFlashcard = ref(false);
 
     onMounted(async () => {
       $q.loading.show();
@@ -103,10 +121,11 @@ export default defineComponent({
     });
 
     return {
-      visibleFlashcardInputModal: ref(false),
       name,
       description,
       flashcards,
+      visibleFlashcardInputModal: ref(false),
+      visibleImportMultipleFlashcard,
       addNewTerm: () => {
         flashcards.value.push({
           id: uuidv4(),
@@ -122,7 +141,10 @@ export default defineComponent({
       removeFlashcard: (flashcard: Flashcard) => {
         const temp = flashcards.value.filter((item) => item.id != flashcard.id);
         if (temp.length == 0) {
-          alert('Study set must have at least one term');
+          CommonService.showNotify(
+            'warning',
+            'Study set must have at least one term!'
+          );
           return;
         } else {
           flashcards.value = temp;
@@ -130,7 +152,10 @@ export default defineComponent({
       },
       updateStudyset: async () => {
         if (name.value.trim() == '') {
-          alert('Please input the course name');
+          CommonService.showNotify(
+            'warning',
+            'Please enter the study set name!'
+          );
           return;
         }
 
@@ -140,7 +165,10 @@ export default defineComponent({
         );
 
         if (flashcards.value.length <= 0) {
-          alert('Please input flashcard');
+          CommonService.showNotify(
+            'warning',
+            'Study set must have at least one term!'
+          );
           flashcards.value.push({
             id: uuidv4(),
             order: flashcards.value.length + 1,
@@ -162,6 +190,32 @@ export default defineComponent({
         await StudysetService.update(id, data);
         router.push({ name: 'StudySetDetailPage', params: { id: id } });
         CommonService.showNotify('success', 'Update study set successfully!');
+      },
+      importFlashcards: (data: string) => {
+        const rows = data.trim().split('\n');
+
+        flashcards.value = flashcards.value.filter(
+          (item) =>
+            (item.front_side && item.front_side.trim()) ||
+            (item.back_side && item.back_side.trim())
+        );
+
+        rows.forEach((item) => {
+          const row = CommonService.parseCSVLine(item);
+
+          flashcards.value.push({
+            id: uuidv4(),
+            order: flashcards.value.length,
+            front_side: row[0].replaceAll('\\\\', '\n'),
+            back_side: row[1].replaceAll('\\\\', '\n'),
+            level: 0,
+            next_learn: moment(),
+            created_at: moment(),
+            updated_at: moment(),
+          });
+        });
+
+        visibleImportMultipleFlashcard.value = false;
       },
     };
   },

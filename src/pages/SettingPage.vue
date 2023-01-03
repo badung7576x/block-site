@@ -2,21 +2,21 @@
   <q-page class="space-y-4 py-4 px-8 bg-gray-50">
     <div class="flex items-center justify-between">
       <div class="text-2xl font-semibold text-gray-500">
-        {{ $t('settings.title') }}
+        {{ $t('pSettings.title') }}
       </div>
       <button
         @click="saveSetting"
         type="button"
-        class="text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-1.5 mr-2 mb-2 focus:outline-none"
+        class="text-gray-500 bg-gray-300 hover:bg-green-700 hover:text-white focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2 mr-2 mb-2 focus:outline-none"
       >
-        {{ $t('settings.save_btn') }}
+        {{ $t('pSettings.btnSave') }}
       </button>
     </div>
     <div class="row">
       <label
         for="first_name"
         class="block mb-2 text-lg font-medium text-gray-500"
-        >Study set will learn</label
+        >{{ $t('pSettings.lStudyset') }}</label
       >
       <q-select
         class="ring-1 ring-slate-200 w-full text-sm px-3 shadow-sm placeholder-gray-500 rounded-md focus:outline-none focus:ring-2 focus:ring-slate-300"
@@ -57,13 +57,12 @@
       <label
         for="first_name"
         class="block mb-2 text-lg font-medium text-gray-500"
-        >Max flashcards (Number of flashcards per lesson)</label
+        >{{ $t('pSettings.lMaxFlashcards') }}</label
       >
       <input
         type="number"
         class="ring-1 ring-slate-200 w-full text-sm py-2 px-4 shadow-sm placeholder-gray-500 rounded-md focus:outline-none focus:ring-2 focus:ring-slate-300"
         v-model="maxFlashcards"
-        required
       />
     </div>
   </q-page>
@@ -94,16 +93,22 @@ export default defineComponent({
       const setting = await SettingService.getCurrentSetting();
       maxFlashcards.value = setting?.max_flashcards || 5;
       learnStudyset.value = setting?.learn_study_set || [];
-    }),
-      watch(
-        () => studysets.value,
-        () => {
-          options.value =
-            studysets.value?.map((item) => {
-              return { label: item.name, value: item.id };
-            }) || [];
-        }
-      );
+    });
+
+    watch(
+      () => studysets.value,
+      () => {
+        options.value =
+          studysets.value?.map((item) => {
+            return { label: item.name, value: item.id };
+          }) || [];
+        const optionValues = options.value.map((item) => item.value);
+
+        learnStudyset.value = learnStudyset.value.filter(
+          (item) => optionValues.indexOf(item) != -1
+        );
+      }
+    );
 
     return {
       maxFlashcards,

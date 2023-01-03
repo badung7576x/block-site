@@ -70,6 +70,9 @@ const showNotify = (type: string, message: string) => {
   if (type == 'success') {
     htmlMessage = `<div class="m-0 p-4 text-sm text-green-700 bg-green-100 rounded-lg">${message}</div>`;
   }
+  if (type == 'warning') {
+    htmlMessage = `<div class="m-0 p-4 text-sm text-yellow-700 bg-yellow-100 rounded-lg">⚠ ${message}</div>`;
+  }
 
   Notify.create({
     html: true,
@@ -80,6 +83,42 @@ const showNotify = (type: string, message: string) => {
   });
 };
 
+const parseCSVLine = (strData: string, strDelimiter = ',') => {
+  strDelimiter = strDelimiter || ',';
+
+  const objPattern = new RegExp(
+    '(\\' +
+      strDelimiter +
+      '|\\r?\\n|\\r|^)' +
+      '(?:"([^"]*(?:""[^"]*)*)"|' +
+      '([^"\\' +
+      strDelimiter +
+      '\\r\\n]*))',
+    'gi'
+  );
+
+  const arrData: string[][] = [[]];
+  let arrMatches = null;
+
+  while ((arrMatches = objPattern.exec(strData))) {
+    const strMatchedDelimiter = arrMatches[1];
+
+    if (strMatchedDelimiter.length && strMatchedDelimiter != strDelimiter) {
+      arrData.push();
+    }
+
+    if (arrMatches[2]) {
+      arrData[arrData.length - 1].push(
+        arrMatches[2].replace(new RegExp('""', 'g'), '"')
+      );
+    } else {
+      arrData[arrData.length - 1].push(arrMatches[3]);
+    }
+  }
+
+  return arrData[0];
+};
+
 export default {
   normalizeUrl,
   isValidUrl,
@@ -87,4 +126,5 @@ export default {
   getMetadata,
   generateDefaultIcon,
   showNotify,
+  parseCSVLine,
 };

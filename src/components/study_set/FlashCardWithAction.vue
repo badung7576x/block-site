@@ -167,6 +167,7 @@ export default defineComponent({
   .front, .back
     position: absolute
     backface-visibility: hidden
+    white-space: pre-line
   .back
     transform: rotateY(180deg)
 </style>

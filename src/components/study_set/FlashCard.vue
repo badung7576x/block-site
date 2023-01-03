@@ -12,14 +12,14 @@
           @click.stop="flip = !flip"
         >
           <div
-            class="front w-full h-full shadow-2xl rounded-2xl p-5 bg-white flex justify-center items-center text-2xl"
+            class="front w-full min-h-[400px] max-h-[550px] shadow-2xl rounded-2xl p-5 bg-white flex justify-center items-center text-2xl"
           >
-            {{ flashcard?.front_side }}
+            {{ frontSide }}
           </div>
           <div
-            class="back w-full h-full shadow-2xl rounded-2xl p-5 bg-white flex justify-center items-center text-2xl"
+            class="back w-full min-h-[400px] max-h-[550px] shadow-2xl rounded-2xl p-5 bg-white flex justify-center items-center text-2xl"
           >
-            {{ flashcard?.back_side }}
+            {{ backSide }}
           </div>
         </div>
       </div>
@@ -59,6 +59,16 @@ export default defineComponent({
     return {
       open,
       flip,
+      frontSide: computed(() =>
+        props.flashcard?.front_side
+          ? props.flashcard?.front_side.replaceAll('\\\\', '\n')
+          : ''
+      ),
+      backSide: computed(() =>
+        props.flashcard?.back_side
+          ? props.flashcard?.back_side.replaceAll('\\\\', '\n')
+          : ''
+      ),
     };
   },
 });
@@ -75,6 +85,7 @@ export default defineComponent({
   .front, .back
     position: absolute
     backface-visibility: hidden
+    white-space: pre-line
   .back
     transform: rotateY(180deg)
 </style>

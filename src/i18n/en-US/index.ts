@@ -34,37 +34,40 @@ export default {
       msgErrorUrlExists: 'Url already exists!',
     },
   },
-  study_set: {
+  pStudysets: {
     title: 'Study sets',
-    create_btn: 'Create new study set',
-    no_study_set: 'No study sets',
-    terms: 'terms',
+    btnCreate: 'Create new study set',
+    unit: 'terms',
+    noStudysets: 'No study sets',
   },
-  create_study_set: {
-    title: 'New study set',
-    create_btn: 'Create',
+  pCreateStudyset: {
+    title: 'Create new study set',
+    btnCreate: 'Create',
     terms: 'Terms',
-    add_new_term: 'Add new term',
-    import_btn: 'Import',
+    btnAddNewTerm: 'Add new term',
+    btnImport: '+ Import multiple flashcard',
+    inputNamePlaceholder: 'Enter study set name',
+    inputDescriptionPlaceholder: 'Enter description (optional)',
+    modalImport: {
+      btnImport: 'Import data',
+    },
   },
-  edit_study_set: {
+  pEditStudyset: {
     title: 'Edit study set',
-    update_btn: 'Update',
-    terms: 'Terms',
-    add_new_term: 'Add new term',
+    btnUpdate: 'Update',
   },
-  study_set_detail: {
-    delete_btn: 'Delete',
-    edit_btn: 'Edit',
+  pStudysetDetail: {
+    btnDelete: 'Delete',
+    btnEdit: 'Edit',
     terms: 'Terms',
-    no_terms: 'No terms',
+    noTerms: 'No terms',
     progress: 'Learning progress',
+    msgDeleteStudyset: 'Do you want to delete this study set?',
   },
-  settings: {
+  pSettings: {
     title: 'Settings',
-    save_btn: 'Save',
-  },
-  messages: {
-    delete_study_set: 'Do you want to delete this study set?',
+    btnSave: 'Save',
+    lStudyset: 'Study set will study',
+    lMaxFlashcards: 'Number of flashcard will study',
   },
 };

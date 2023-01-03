@@ -54,8 +54,6 @@ export default class StudysetService {
       ? await this.get(randomStudysetID)
       : await this.getLast();
 
-    console.log(studySet);
-
     const flashcards =
       studySet && studySet.flashcards
         ? studySet.flashcards.filter((item) => {
